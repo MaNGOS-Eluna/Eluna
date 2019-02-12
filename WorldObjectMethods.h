@@ -570,8 +570,13 @@ namespace LuaWorldObject
     int GetDistance2d(lua_State* L, WorldObject* obj)
     {
         WorldObject* target = Eluna::CHECKOBJ<WorldObject>(L, 2, false);
-        if (target)
+        if (target) {
+#ifdef CMANGOS
+            Eluna::Push(L, obj->GetDistance2d(target)); //WIP
+#else
             Eluna::Push(L, obj->GetDistance2d(target));
+#endif
+        }
         else
         {
             float X = Eluna::CHECKVAL<float>(L, 2);
@@ -761,46 +766,97 @@ namespace LuaWorldObject
         float o = Eluna::CHECKVAL<float>(L, 6);
         uint32 spawnType = Eluna::CHECKVAL<uint32>(L, 7, 8);
         uint32 despawnTimer = Eluna::CHECKVAL<uint32>(L, 8, 0);
-
-        TempSummonType type;
+#ifdef CMANGOS
+        //enum TempSpawnType
+        //{
+        //    TEMPSPAWN_MANUAL_DESPAWN = 0,             // despawns when UnSummon() is called
+        //    TEMPSPAWN_DEAD_DESPAWN = 1,             // despawns when the creature disappears
+        //    TEMPSPAWN_CORPSE_DESPAWN = 2,             // despawns instantly after death
+        //    TEMPSPAWN_CORPSE_TIMED_DESPAWN = 3,             // despawns after a specified time after death (or when the creature disappears)
+        //    TEMPSPAWN_TIMED_DESPAWN = 4,             // despawns after a specified time
+        //    TEMPSPAWN_TIMED_OOC_DESPAWN = 5,             // despawns after a specified time after the creature is out of combat
+        //    TEMPSPAWN_TIMED_OR_DEAD_DESPAWN = 6,             // despawns after a specified time OR when the creature disappears
+        //    TEMPSPAWN_TIMED_OR_CORPSE_DESPAWN = 7,             // despawns after a specified time OR when the creature dies
+        //    TEMPSPAWN_TIMED_OOC_OR_DEAD_DESPAWN = 8,             // despawns after a specified time (OOC) OR when the creature disappears
+        //    TEMPSPAWN_TIMED_OOC_OR_CORPSE_DESPAWN = 9,             // despawns after a specified time (OOC) OR when the creature dies
+        //};
+        TempSpawnType type;
         switch (spawnType)
         {
-            case 1:
-                type = TEMPSUMMON_TIMED_OR_DEAD_DESPAWN;
-                break;
-            case 2:
-                type = TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN;
-                break;
-            case 3:
-                type = TEMPSUMMON_TIMED_DESPAWN;
-                break;
-            case 4:
-#if defined TRINITY || AZEROTHCORE
-                type = TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT;
+        case 1:
+            type = TEMPSPAWN_DEAD_DESPAWN;
+            break;
+        case 2:
+            type = TEMPSPAWN_CORPSE_DESPAWN;
+            break;
+        case 3:
+            type = TEMPSPAWN_CORPSE_TIMED_DESPAWN;
+            break;
+        case 4:
+            type = TEMPSPAWN_TIMED_DESPAWN;
+            break;
+        case 5:
+            type = TEMPSPAWN_TIMED_OOC_DESPAWN;
+            break;
+        case 6:
+            type = TEMPSPAWN_TIMED_OR_DEAD_DESPAWN;
+            break;
+        case 7:
+            type = TEMPSPAWN_TIMED_OR_CORPSE_DESPAWN;
+            break;
+        case 8:
+            type = TEMPSPAWN_MANUAL_DESPAWN;
+            break;
+        case 9:
+            type = TEMPSPAWN_TIMED_OOC_OR_DEAD_DESPAWN;
+            break;
+        case 10:
+            type = TEMPSPAWN_TIMED_OOC_OR_CORPSE_DESPAWN;
+            break;
+            break;
 #else
-                type = TEMPSUMMON_TIMED_OOC_DESPAWN;
+        TempSummonType type;
+
+        switch (spawnType)
+        {
+        case 1:
+            type = TEMPSUMMON_TIMED_OR_DEAD_DESPAWN;
+            break;
+        case 2:
+            type = TEMPSUMMON_TIMED_OR_CORPSE_DESPAWN;
+            break;
+        case 3:
+            type = TEMPSUMMON_TIMED_DESPAWN;
+            break;
+        case 4:
+#if defined TRINITY || AZEROTHCORE
+            type = TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT;
+#else
+            type = TEMPSUMMON_TIMED_OOC_DESPAWN;
 #endif
-                break;
-            case 5:
-                type = TEMPSUMMON_CORPSE_DESPAWN;
-                break;
-            case 6:
-                type = TEMPSUMMON_CORPSE_TIMED_DESPAWN;
-                break;
-            case 7:
-                type = TEMPSUMMON_DEAD_DESPAWN;
-                break;
-            case 8:
-                type = TEMPSUMMON_MANUAL_DESPAWN;
-                break;
+            break;
+        case 5:
+            type = TEMPSUMMON_CORPSE_DESPAWN;
+            break;
+        case 6:
+            type = TEMPSUMMON_CORPSE_TIMED_DESPAWN;
+            break;
+        case 7:
+            type = TEMPSUMMON_DEAD_DESPAWN;
+            break;
+        case 8:
+            type = TEMPSUMMON_MANUAL_DESPAWN;
+            break;
 #if !defined TRINITY && !AZEROTHCORE
-            case 9:
-                type = TEMPSUMMON_TIMED_OOC_OR_CORPSE_DESPAWN;
-                break;
-            case 10:
-                type = TEMPSUMMON_TIMED_OOC_OR_DEAD_DESPAWN;
-                break;
+        case 9:
+            type = TEMPSUMMON_TIMED_OOC_OR_CORPSE_DESPAWN;
+            break;
+        case 10:
+            type = TEMPSUMMON_TIMED_OOC_OR_DEAD_DESPAWN;
+            break;
 #endif
+#endif
+
             default:
                 return luaL_argerror(L, 7, "valid SpawnType expected");
         }
@@ -1167,7 +1223,11 @@ namespace LuaWorldObject
             return 0;
 
         if (player)
-            obj->PlayDirectSound(soundId, player);
+#ifdef CMANGOS
+            obj->PlayDistanceSound(soundId, PlayPacketParameters(PLAY_TARGET, player));
+#else
+            obj->PlayDistanceSound(soundId, player);
+#endif
         else
             obj->PlayDirectSound(soundId);
         return 0;
@@ -1191,9 +1251,14 @@ namespace LuaWorldObject
         Player* player = Eluna::CHECKOBJ<Player>(L, 3, false);
         if (!sSoundEntriesStore.LookupEntry(soundId))
             return 0;
-
+        
         if (player)
+#ifdef CMANGOS
+            obj->PlayDistanceSound(soundId, PlayPacketParameters(PLAY_TARGET, player));
+#else
             obj->PlayDistanceSound(soundId, player);
+#endif
+            
         else
             obj->PlayDistanceSound(soundId);
         return 0;

@@ -8,16 +8,16 @@
 #define _LUA_ENGINE_H
 
 #include "Common.h"
-#include "SharedDefines.h"
-#include "DBCEnums.h"
+#include "Globals/SharedDefines.h"
+#include "Server/DBCEnums.h"
 
-#include "Group.h"
-#include "Item.h"
+#include "Groups/Group.h"
+#include "Entities/Item.h"
 #ifndef TRINITY
-#include "Player.h"
+#include "Entities/Player.h"
 #endif
-#include "Weather.h"
-#include "World.h"
+#include "Weather/Weather.h"
+#include "World/World.h"
 #include "Hooks.h"
 #include "ElunaUtility.h"
 #include <mutex>
@@ -77,6 +77,9 @@ class Spell;
 class SpellCastTargets;
 #if defined(TRINITY) || AZEROTHCORE
 class TempSummon;
+#elif defined CMANGOS
+class TemporarySpawn;
+typedef TemporarySpawn TempSummon;
 #else
 class TemporarySummon;
 typedef TemporarySummon TempSummon;

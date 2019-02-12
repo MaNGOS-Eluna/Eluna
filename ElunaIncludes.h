@@ -7,19 +7,48 @@
 #ifndef _ELUNA_INCLUDES_H
 #define _ELUNA_INCLUDES_H
 
-// Required
+#if defined CMANGOS & defined TBC
+#include "Accounts/AccountMgr.h"
+#include "AuctionHouse/AuctionHouseMgr.h"
+#include "Grids/Cell.h"
+#include "Grids/CellImpl.h"
+#include "Chat/Chat.h"
+#include "Chat/Channel.h"
+#include "Server/DBCStores.h"
+#include "Entities/GossipDef.h"
+#include "Grids/GridNotifiers.h"
+#include "Grids/GridNotifiersImpl.h"
+#include "Groups/Group.h"
+#include "Guilds/Guild.h"
+#include "Guilds/GuildMgr.h"
+#include "Tools/Language.h"
+#include "Mails/Mail.h"
+#include "Maps/MapManager.h"
+#include "Globals/ObjectAccessor.h"
+#include "Globals/ObjectMgr.h"
+#include "Server/Opcodes.h"
+#include "Entities/Player.h"
+#include "Entities/Pet.h"
+#include "Reputation/ReputationMgr.h"
+#include "DBScripts/ScriptMgr.h"
+#include "Spells/Spell.h"
+#include "Spells/SpellAuras.h"
+#include "Spells/SpellMgr.h"
+#include "Entities/TemporarySpawn.h"
+#include "Server/WorldSession.h"
+#else
 #include "AccountMgr.h"
 #include "AuctionHouseMgr.h"
 #include "Cell.h"
 #include "CellImpl.h"
 #include "Chat.h"
 #include "Channel.h"
-#include "DBCStores.h"
+#include "Server/DBCStores.h"
 #include "GameEventMgr.h"
 #include "GossipDef.h"
 #include "GridNotifiers.h"
 #include "GridNotifiersImpl.h"
-#include "Group.h"
+#include "Groups/Group.h"
 #include "Guild.h"
 #include "GuildMgr.h"
 #include "Language.h"
@@ -28,7 +57,7 @@
 #include "ObjectAccessor.h"
 #include "ObjectMgr.h"
 #include "Opcodes.h"
-#include "Player.h"
+#include "Entities/Player.h"
 #include "Pet.h"
 #include "ReputationMgr.h"
 #include "ScriptMgr.h"
@@ -36,8 +65,12 @@
 #include "SpellAuras.h"
 #include "SpellMgr.h"
 #include "TemporarySummon.h"
-#include "WorldPacket.h"
 #include "WorldSession.h"
+#endif 
+// Required
+
+#include "WorldPacket.h"
+
 
 #if defined TRINITY
 #include "GitRevision.h"
@@ -60,12 +93,14 @@
 #else
 #include "Config/Config.h"
 #ifdef CMANGOS
-#include "AI/AggressorAI.h"
+#include "AI/BaseAI/AggressorAI.h"
+//#include "AI/BaseAI/GuardAI.h"
+//#include "AI/ScriptDevAI/ScriptDevAIMgr.h"
 #else
 #include "AggressorAI.h"
 #endif
 #include "BattleGroundMgr.h"
-#include "SQLStorages.h"
+#include "Server/SQLStorages.h"
 #include "revision.h"
 #endif
 
@@ -74,7 +109,7 @@
 #endif
 
 #ifndef CLASSIC
-#include "ArenaTeam.h"
+#include "Arena/ArenaTeam.h"
 #endif
 
 #ifndef CLASSIC
@@ -92,7 +127,7 @@ typedef Opcodes                 OpcodesList;
 
 #ifdef CMANGOS
 #define CORE_NAME               "cMaNGOS"
-#define CORE_VERSION            REVISION_DATE " " REVISION_TIME
+#define CORE_VERSION            REVISION_DATE 
 #endif
 
 #ifdef TRINITY
@@ -155,8 +190,12 @@ typedef Opcodes                 OpcodesList;
 #if defined(CATA) || defined(MISTS) || (defined(WOTLK) && !defined(MANGOS))
 #define UNIT_BYTE2_FLAG_SANCTUARY   UNIT_BYTE2_FLAG_SUPPORTABLE
 #endif
-
+#ifdef CMANGOS
+typedef TemporarySpawn TempSummon;
+#else
 typedef TemporarySummon TempSummon;
+#endif
+
 typedef SpellEntry SpellInfo;
 #endif // TRINITY
 

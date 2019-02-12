@@ -11,7 +11,7 @@
 #if defined(TRINITY) || AZEROTHCORE
 #include "InstanceScript.h"
 #else
-#include "InstanceData.h"
+#include "Maps/InstanceData.h"
 #endif
 
 

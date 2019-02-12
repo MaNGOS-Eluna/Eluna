@@ -5,11 +5,11 @@
 */
 
 #include "ElunaUtility.h"
-#include "World.h"
-#include "Object.h"
-#include "Unit.h"
-#include "GameObject.h"
-#include "DBCStores.h"
+#include "World/World.h"
+#include "Entities/Object.h"
+#include "Entities/Unit.h"
+#include "Entities/GameObject.h"
+#include "Server/DBCStores.h"
 
 uint32 ElunaUtil::GetCurrTime()
 {
@@ -90,7 +90,7 @@ bool ElunaUtil::WorldObjectInRangeCheck::operator()(WorldObject* u)
             {
                 if (i_obj_fact)
                 {
-#if defined TRINITY || AZEROTHCORE
+#if defined TRINITY ||  defined  AZEROTHCORE ||  defined  CMANGOS
                     if ((i_obj_fact->IsHostileTo(*target->GetFactionTemplateEntry())) != (i_hostile == 1))
                         return false;
 #else

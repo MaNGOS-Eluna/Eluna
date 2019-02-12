@@ -60,7 +60,7 @@ struct ElunaCreatureAI : ScriptedAI
 
         if (!sEluna->UpdateAI(me, diff))
         {
-#if defined TRINITY || AZEROTHCORE
+#if defined TRINITY || defined AZEROTHCORE  || defined CMANGOS
             if (!me->HasFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_IMMUNE_TO_NPC))
                 ScriptedAI::UpdateAI(diff);
 #else
@@ -89,8 +89,10 @@ struct ElunaCreatureAI : ScriptedAI
 #endif
 
     // Called at any Damage from any attacker (before damage apply)
-#if AZEROTHCORE
+#if defined AZEROTHCORE
     void DamageTaken(Unit* attacker, uint32& damage, DamageEffectType damagetype, SpellSchoolMask damageSchoolMask) override
+#elif defined CMANGOS
+    void DamageTaken(Unit* attacker, uint32& damage, DamageEffectType damageType)
 #else
     void DamageTaken(Unit* attacker, uint32& damage) override
 #endif
@@ -100,7 +102,7 @@ struct ElunaCreatureAI : ScriptedAI
 #if AZEROTHCORE
             ScriptedAI::DamageTaken(attacker, damage, damagetype, damageSchoolMask);
 #else
-            ScriptedAI::DamageTaken(attacker, damage);
+            ScriptedAI::DamageTaken(attacker, damage, damageType);
 #endif
         }
     }

@@ -12,13 +12,13 @@
 #include <mutex>
 #include <memory>
 #include "Common.h"
-#include "SharedDefines.h"
-#include "ObjectGuid.h"
+#include "Globals/SharedDefines.h"
+#include "Entities/ObjectGuid.h"
 #ifdef TRINITY
 #include "QueryResult.h"
 #include "Log.h"
 #ifdef CATA
-#include "Object.h"
+#include "Entities/Object.h"
 #endif
 #else
 #include "Database/QueryResult.h"
@@ -63,7 +63,7 @@ typedef QueryNamedResult ElunaQuery;
 #define GetTemplate             GetProto
 #endif
 
-#if defined(TRINITY) || defined(MANGOS)
+#if defined(TRINITY) || defined(MANGOS) || defined(CMANGOS)
 #ifndef MAKE_NEW_GUID
 #define MAKE_NEW_GUID(l, e, h)  ObjectGuid(h, e, l)
 #endif

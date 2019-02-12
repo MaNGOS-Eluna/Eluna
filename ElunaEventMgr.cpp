@@ -6,7 +6,7 @@
 
 #include "ElunaEventMgr.h"
 #include "LuaEngine.h"
-#include "Object.h"
+#include "Entities/Object.h"
 
 extern "C"
 {

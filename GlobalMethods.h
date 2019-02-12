@@ -1540,15 +1540,24 @@ namespace LuaGlobalFunctions
                     Eluna::Push(L);
                     return 1;
                 }
-
+#ifdef CMANGOS
+                TemporarySpawn* pCreature = new TemporarySpawn(ObjectGuid(uint64(0)));
+#else
                 TemporarySummon* pCreature = new TemporarySummon(ObjectGuid(uint64(0)));
+#endif
+                
 #if (defined(TBC) || defined(CLASSIC))
                 CreatureCreatePos pos(map, x, y, z, o);
 #else
                 CreatureCreatePos pos(map, x, y, z, o, phase);
 #endif
 
+#ifdef CMANGOS
+                if (!pCreature->Create(map->GenerateLocalLowGuid(cinfo->GetHighGuid()), pos, cinfo))
+#else
                 if (!pCreature->Create(map->GenerateLocalLowGuid(cinfo->GetHighGuid()), pos, cinfo, TEAM_NONE))
+#endif
+                
                 {
                     delete pCreature;
                     {
@@ -1558,12 +1567,18 @@ namespace LuaGlobalFunctions
                 }
 
                 pCreature->SetRespawnCoord(pos);
-
                 // Active state set before added to map
                 pCreature->SetActiveObjectState(false);
 
+
+#ifdef CMANGOS
+                // Also initializes the AI and MMGen
+                pCreature->Summon(durorresptime ? TEMPSPAWN_DEAD_DESPAWN : TEMPSPAWN_MANUAL_DESPAWN, durorresptime);
+#else
                 // Also initializes the AI and MMGen
                 pCreature->Summon(durorresptime ? TEMPSUMMON_TIMED_OR_DEAD_DESPAWN : TEMPSUMMON_MANUAL_DESPAWN, durorresptime);
+#endif
+                
 
                 // Creature Linking, Initial load is handled like respawn
                 if (pCreature->IsLinkingEventTrigger())
@@ -2311,8 +2326,10 @@ namespace LuaGlobalFunctions
             nodeEntry->MountCreatureID[0] = mountH;
             nodeEntry->MountCreatureID[1] = mountA;
             sTaxiNodesStore.SetEntry(nodeId++, nodeEntry);
-#ifndef AZEROTHCORE
+#if !defined AZEROTHCORE & !defined CMANGOS
             sTaxiPathNodesByPath[pathId].set(index++, new TaxiPathNodeEntry(entry));
+#elif defined  CMANGOS
+            sTaxiPathNodesByPath[pathId][index++] = new TaxiPathNodeEntry(entry);
 #else
             sTaxiPathNodesByPath[pathId][index++] = new TaxiPathNodeEntry(entry);
 #endif

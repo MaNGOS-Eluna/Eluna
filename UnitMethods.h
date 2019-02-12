@@ -375,11 +375,7 @@ namespace LuaUnit
      */
     int IsCharmed(lua_State* L, Unit* unit)
     {
-#ifdef CMANGOS
-        Eluna::Push(L, unit->isCharmed());
-#else
         Eluna::Push(L, unit->IsCharmed());
-#endif
         return 1;
     }
 
@@ -1225,6 +1221,10 @@ namespace LuaUnit
         Trinity::AnyFriendlyUnitInObjectRangeCheck checker(unit, unit, range);
         Trinity::UnitListSearcher<Trinity::AnyFriendlyUnitInObjectRangeCheck> searcher(unit, list, checker);
         unit->VisitNearbyObject(range, searcher);
+#elif defined CMANGOS
+        MaNGOS::AnyFriendlyUnitInObjectRangeCheck checker(unit, nullptr, range);
+        MaNGOS::UnitListSearcher<MaNGOS::AnyFriendlyUnitInObjectRangeCheck> searcher(list, checker);
+        Cell::VisitGridObjects(unit, searcher, range);
 #else
         MaNGOS::AnyFriendlyUnitInObjectRangeCheck checker(unit, range);
         MaNGOS::UnitListSearcher<MaNGOS::AnyFriendlyUnitInObjectRangeCheck> searcher(list, checker);
@@ -1955,7 +1955,7 @@ namespace LuaUnit
     {
 #ifdef TRINITY
         unit->GetThreatManager().ClearAllThreat();
-#elif AZEROTHCORE
+#elif defined AZEROTHCORE || defined CMANGOS
         unit->getThreatManager().clearReferences();
 #else
         unit->GetThreatManager().clearReferences();
@@ -2793,8 +2793,12 @@ namespace LuaUnit
                 damage = 0;
             else
                 damage -= absorb + resist;
-
+#if defined CMANGOS
+            unit->DealDamageMods(target, damage, &absorb, SPELL_DIRECT_DAMAGE);
+#else
             unit->DealDamageMods(target, damage, &absorb);
+#endif
+            
             unit->DealDamage(target, damage, NULL, DIRECT_DAMAGE, schoolmask, NULL, false);
             unit->SendAttackStateUpdate(HITINFO_NORMALSWING2, target, schoolmask, damage, absorb, resist, VICTIMSTATE_NORMAL, 0);
             return 0;
@@ -2903,7 +2907,7 @@ namespace LuaUnit
 #else
 #ifdef CMANGOS
         SpellEntry const* spellEntry = GetSpellStore()->LookupEntry<SpellEntry>(spell);
-        unit->AddThreat(victim, threat, false, spellEntry ? spellEntry->SchoolMask : SPELL_SCHOOL_MASK_NONE, spellEntry);
+        unit->AddThreat(victim, threat, false, spellEntry ? static_cast<SpellSchoolMask>(spellEntry->SchoolMask) : SPELL_SCHOOL_MASK_NONE, spellEntry);
 #else
         SpellEntry const* spellEntry = sSpellStore.LookupEntry(spell);
 #ifdef CLASSIC

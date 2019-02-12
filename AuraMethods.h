@@ -186,8 +186,10 @@ namespace LuaAura
     int SetStackAmount(lua_State* L, Aura* aura)
     {
         uint8 amount = Eluna::CHECKVAL<uint8>(L, 2);
-#if defined TRINITY || defined AZEROTHCORE
+#if defined TRINITY || defined AZEROTHCORE 
         aura->SetStackAmount(amount);
+#elif defined CMANGOS
+        aura->GetHolder()->SetStackAmount(amount);
 #else
         aura->GetHolder()->SetStackAmount(amount);
 #endif

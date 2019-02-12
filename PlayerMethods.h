@@ -331,7 +331,12 @@ namespace LuaPlayer
      */
     int IsMoving(lua_State* L, Player* player) // enable for unit when mangos support it
     {
+#ifdef CMANGOS
+        Eluna::Push(L, player->IsMoving());
+#else
         Eluna::Push(L, player->isMoving());
+#endif 
+        
         return 1;
     }
 
@@ -1010,8 +1015,12 @@ namespace LuaPlayer
     int GetSkillTempBonusValue(lua_State* L, Player* player)
     {
         uint32 skill = Eluna::CHECKVAL<uint32>(L, 2);
-
+#ifdef CMANGOS
+        Eluna::Push(L, player->GetSkillBonusTemporary(skill));
+#else
         Eluna::Push(L, player->GetSkillTempBonusValue(skill));
+#endif
+        
         return 1;
     }
 
@@ -1024,8 +1033,12 @@ namespace LuaPlayer
     int GetSkillPermBonusValue(lua_State* L, Player* player)
     {
         uint32 skill = Eluna::CHECKVAL<uint32>(L, 2);
-
+#ifdef CMANGOS
+        Eluna::Push(L, player->GetSkillBonusPermanent(skill));
+#else
         Eluna::Push(L, player->GetSkillPermBonusValue(skill));
+#endif
+        
         return 1;
     }
 
@@ -1038,8 +1051,12 @@ namespace LuaPlayer
     int GetPureSkillValue(lua_State* L, Player* player)
     {
         uint32 skill = Eluna::CHECKVAL<uint32>(L, 2);
-
+#ifdef CMANGOS
+        Eluna::Push(L, player->GetSkillValuePure(skill));
+#else
         Eluna::Push(L, player->GetPureSkillValue(skill));
+#endif
+        
         return 1;
     }
 
@@ -1052,8 +1069,12 @@ namespace LuaPlayer
     int GetBaseSkillValue(lua_State* L, Player* player)
     {
         uint32 skill = Eluna::CHECKVAL<uint32>(L, 2);
-
+#ifdef CMANGOS
+        Eluna::Push(L, player->GetSkillValueBase(skill));
+#else
         Eluna::Push(L, player->GetBaseSkillValue(skill));
+#endif
+        
         return 1;
     }
 
@@ -1080,8 +1101,12 @@ namespace LuaPlayer
     int GetPureMaxSkillValue(lua_State* L, Player* player)
     {
         uint32 skill = Eluna::CHECKVAL<uint32>(L, 2);
-
+#ifdef CMANGOS
+        Eluna::Push(L, player->GetSkillMaxPure(skill));
+#else
         Eluna::Push(L, player->GetPureMaxSkillValue(skill));
+#endif
+        
         return 1;
     }
 
@@ -1094,8 +1119,12 @@ namespace LuaPlayer
     int GetMaxSkillValue(lua_State* L, Player* player)
     {
         uint32 skill = Eluna::CHECKVAL<uint32>(L, 2);
-
+#ifdef CMANGOS
+        Eluna::Push(L, player->GetSkillMax(skill));
+#else
         Eluna::Push(L, player->GetMaxSkillValue(skill));
+#endif
+        
         return 1;
     }
 
@@ -1772,7 +1801,7 @@ namespace LuaPlayer
         uint32 faction = Eluna::CHECKVAL<uint32>(L, 2);
         int32 value = Eluna::CHECKVAL<int32>(L, 3);
 
-        FactionEntry const* factionEntry = sFactionStore.LookupEntry(faction);
+        FactionEntry const* factionEntry = sFactionStore.LookupEntry<FactionEntry>(faction);
         player->GetReputationMgr().SetReputation(factionEntry, value);
         return 0;
     }
@@ -2753,7 +2782,12 @@ namespace LuaPlayer
         uint32 questId = Eluna::CHECKVAL<uint32>(L, 2);
         WorldObject* obj = Eluna::CHECKOBJ<WorldObject>(L, 3);
 
+#ifdef CMANGOS
+        player->RewardPlayerAndGroupAtEventExplored(questId, obj);
+#else
         player->GroupEventHappens(questId, obj);
+#endif
+        
         return 0;
     }
 
@@ -2888,7 +2922,7 @@ namespace LuaPlayer
             uint32 repValue = quest->GetRepObjectiveValue();
             uint32 curRep = player->GetReputationMgr().GetReputation(repFaction);
             if (curRep < repValue)
-                if (FactionEntry const* factionEntry = sFactionStore.LookupEntry(repFaction))
+                if (FactionEntry const* factionEntry = sFactionStore.LookupEntry<FactionEntry>(repFaction))
                     player->GetReputationMgr().SetReputation(factionEntry, repValue);
         }
 
@@ -3925,7 +3959,11 @@ namespace LuaPlayer
 
         // Get correct existing group if any
         Group* group = player->GetGroup();
+#ifdef CMANGOS
+        if (group && group->isBattleGroup())
+#else
         if (group && group->isBGGroup())
+#endif
             group = player->GetOriginalGroup();
 
         bool success = false;
