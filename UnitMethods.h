@@ -74,7 +74,7 @@ namespace LuaUnit
 #ifdef TRINITY
         Eluna::Push(L, unit->IsRooted() || unit->HasUnitMovementFlag(MOVEMENTFLAG_ROOT));
 #endif
-#ifdef CMANGOS
+#if defined CMANGOS || defined LHMANGOS
         Eluna::Push(L, unit->isInRoots() || unit->IsRooted());
 #endif
 #ifdef MANGOS
@@ -135,7 +135,7 @@ namespace LuaUnit
      */
     int IsGuildMaster(lua_State* L, Unit* unit)
     {
-#ifdef CMANGOS
+#if defined CMANGOS || defined LHMANGOS
         Eluna::Push(L, unit->isGuildMaster());
 #else
         Eluna::Push(L, unit->IsGuildMaster());
@@ -150,7 +150,7 @@ namespace LuaUnit
      */
     int IsInnkeeper(lua_State* L, Unit* unit)
     {
-#ifdef CMANGOS
+#if defined CMANGOS || defined LHMANGOS
         Eluna::Push(L, unit->isInnkeeper());
 #else
         Eluna::Push(L, unit->IsInnkeeper());
@@ -165,7 +165,7 @@ namespace LuaUnit
      */
     int IsTrainer(lua_State* L, Unit* unit)
     {
-#ifdef CMANGOS
+#if defined CMANGOS || defined LHMANGOS
         Eluna::Push(L, unit->isTrainer());
 #else
         Eluna::Push(L, unit->IsTrainer());
@@ -180,7 +180,7 @@ namespace LuaUnit
      */
     int IsGossip(lua_State* L, Unit* unit)
     {
-#ifdef CMANGOS
+#if defined CMANGOS || defined LHMANGOS
         Eluna::Push(L, unit->isGossip());
 #else
         Eluna::Push(L, unit->IsGossip());
@@ -195,7 +195,7 @@ namespace LuaUnit
      */
     int IsTaxi(lua_State* L, Unit* unit)
     {
-#ifdef CMANGOS
+#if defined CMANGOS || defined LHMANGOS
         Eluna::Push(L, unit->isTaxi());
 #else
         Eluna::Push(L, unit->IsTaxi());
@@ -210,7 +210,7 @@ namespace LuaUnit
      */
     int IsSpiritHealer(lua_State* L, Unit* unit)
     {
-#ifdef CMANGOS
+#if defined CMANGOS || defined LHMANGOS
         Eluna::Push(L, unit->isSpiritHealer());
 #else
         Eluna::Push(L, unit->IsSpiritHealer());
@@ -225,7 +225,7 @@ namespace LuaUnit
      */
     int IsSpiritGuide(lua_State* L, Unit* unit)
     {
-#ifdef CMANGOS
+#if defined CMANGOS || defined LHMANGOS
         Eluna::Push(L, unit->isSpiritGuide());
 #else
         Eluna::Push(L, unit->IsSpiritGuide());
@@ -240,7 +240,7 @@ namespace LuaUnit
      */
     int IsTabardDesigner(lua_State* L, Unit* unit)
     {
-#ifdef CMANGOS
+#if defined CMANGOS || defined LHMANGOS
         Eluna::Push(L, unit->isTabardDesigner());
 #else
         Eluna::Push(L, unit->IsTabardDesigner());
@@ -255,7 +255,7 @@ namespace LuaUnit
      */
     int IsServiceProvider(lua_State* L, Unit* unit)
     {
-#ifdef CMANGOS
+#if defined CMANGOS || defined LHMANGOS
         Eluna::Push(L, unit->isServiceProvider());
 #else
         Eluna::Push(L, unit->IsServiceProvider());
@@ -270,7 +270,7 @@ namespace LuaUnit
      */
     int IsSpiritService(lua_State* L, Unit* unit)
     {
-#ifdef CMANGOS
+#if defined CMANGOS || defined LHMANGOS
         Eluna::Push(L, unit->isSpiritService());
 #else
         Eluna::Push(L, unit->IsSpiritService());
@@ -285,7 +285,7 @@ namespace LuaUnit
      */
     int IsAlive(lua_State* L, Unit* unit)
     {
-#ifdef CMANGOS
+#if defined CMANGOS || defined LHMANGOS
         Eluna::Push(L, unit->isAlive());
 #else
         Eluna::Push(L, unit->IsAlive());
@@ -330,7 +330,7 @@ namespace LuaUnit
      */
     int IsBanker(lua_State* L, Unit* unit)
     {
-#ifdef CMANGOS
+#if defined CMANGOS || defined LHMANGOS
         Eluna::Push(L, unit->isBanker());
 #else
         Eluna::Push(L, unit->IsBanker());
@@ -345,7 +345,7 @@ namespace LuaUnit
      */
     int IsVendor(lua_State* L, Unit* unit)
     {
-#ifdef CMANGOS
+#if defined CMANGOS || defined LHMANGOS
         Eluna::Push(L, unit->isVendor());
 #else
         Eluna::Push(L, unit->IsVendor());
@@ -360,7 +360,7 @@ namespace LuaUnit
      */
     int IsBattleMaster(lua_State* L, Unit* unit)
     {
-#ifdef CMANGOS
+#if defined CMANGOS || defined LHMANGOS
         Eluna::Push(L, unit->isBattleMaster());
 #else
         Eluna::Push(L, unit->IsBattleMaster());
@@ -375,7 +375,7 @@ namespace LuaUnit
      */
     int IsCharmed(lua_State* L, Unit* unit)
     {
-#ifdef CMANGOS
+#if defined CMANGOS || defined LHMANGOS
         Eluna::Push(L, unit->isCharmed());
 #else
         Eluna::Push(L, unit->IsCharmed());
@@ -390,7 +390,7 @@ namespace LuaUnit
      */
     int IsArmorer(lua_State* L, Unit* unit)
     {
-#ifdef CMANGOS
+#if defined CMANGOS || defined LHMANGOS
         Eluna::Push(L, unit->isArmorer());
 #else
         Eluna::Push(L, unit->IsArmorer());
@@ -444,7 +444,7 @@ namespace LuaUnit
      */
     int IsInCombat(lua_State* L, Unit* unit)
     {
-#ifdef CMANGOS
+#if defined CMANGOS || defined LHMANGOS
         Eluna::Push(L, unit->isInCombat());
 #else
         Eluna::Push(L, unit->IsInCombat());
@@ -492,7 +492,7 @@ namespace LuaUnit
      */
     int IsQuestGiver(lua_State* L, Unit* unit)
     {
-#ifdef CMANGOS
+#if defined CMANGOS || defined LHMANGOS
         Eluna::Push(L, unit->isQuestGiver());
 #else
         Eluna::Push(L, unit->IsQuestGiver());
@@ -1266,6 +1266,10 @@ namespace LuaUnit
         Trinity::AnyUnfriendlyUnitInObjectRangeCheck checker(unit, unit, range);
         Trinity::UnitListSearcher<Trinity::AnyUnfriendlyUnitInObjectRangeCheck> searcher(unit, list, checker);
         unit->VisitNearbyObject(range, searcher);
+#elif defined LHMANGOS
+        MaNGOS::AnyUnfriendlyUnitInObjectRangeCheck checker(unit, unit, range);
+        MaNGOS::UnitListSearcher<MaNGOS::AnyUnfriendlyUnitInObjectRangeCheck> searcher(list, checker);
+        Cell::VisitGridObjects(unit, searcher, range);
 #else
         MaNGOS::AnyUnfriendlyUnitInObjectRangeCheck checker(unit, range);
         MaNGOS::UnitListSearcher<MaNGOS::AnyUnfriendlyUnitInObjectRangeCheck> searcher(list, checker);
@@ -1688,7 +1692,7 @@ namespace LuaUnit
 
 #ifdef TRINITY
         unit->SetPowerType((Powers)type);
-#elif AZEROTHCORE
+#elif defined AZEROTHCORE  || defined LHMANGOS 
         unit->setPowerType((Powers)type);
 #else
         unit->SetPowerType((Powers)type);
@@ -1896,6 +1900,8 @@ namespace LuaUnit
         bool apply = Eluna::CHECKVAL<bool>(L, 2, true);
 #if defined TRINITY || AZEROTHCORE
         unit->SetControlled(apply, UNIT_STATE_ROOT);
+#elif defined LHMANGOS
+        // unit->SetRoot(apply); //this method is only in player.cpp
 #else
         unit->SetRoot(apply);
 #endif
@@ -1956,6 +1962,8 @@ namespace LuaUnit
 #ifdef TRINITY
         unit->GetThreatManager().ClearAllThreat();
 #elif AZEROTHCORE
+        unit->getThreatManager().clearReferences();
+#elif defined LHMANGOS
         unit->getThreatManager().clearReferences();
 #else
         unit->GetThreatManager().clearReferences();
@@ -2142,7 +2150,7 @@ namespace LuaUnit
         float radius = Eluna::CHECKVAL<float>(L, 2);
         float x, y, z;
         unit->GetPosition(x, y, z);
-#if defined TRINITY || AZEROTHCORE
+#if defined TRINITY || defined AZEROTHCORE || defined LHMANGOS
         unit->GetMotionMaster()->MoveRandom(radius);
 #else
         unit->GetMotionMaster()->MoveRandomAroundPoint(x, y, z, radius);
@@ -2370,11 +2378,15 @@ namespace LuaUnit
 #ifdef CMANGOS
         SpellEntry const* spellEntry = GetSpellStore()->LookupEntry<SpellEntry>(spell);
 #endif
-#ifdef MANGOS
+#ifdef MANGOS 
         SpellEntry const* spellEntry = sSpellStore.LookupEntry(spell);
 #endif
 #if defined TRINITY || AZEROTHCORE
         SpellInfo const* spellEntry = sSpellMgr->GetSpellInfo(spell);
+#endif
+
+#if defined LHMANGOS
+        SpellInfo const* spellEntry = sSpellMgr.GetSpellEntry(spell);
 #endif
         if (!spellEntry)
             return 0;
@@ -2453,6 +2465,9 @@ namespace LuaUnit
         bool triggered = Eluna::CHECKVAL<bool>(L, 6, true);
 #ifdef CMANGOS
         unit->CastSpell(_x, _y, _z, spell, TRIGGERED_OLD_TRIGGERED);
+#endif
+#ifdef LHMANGOS
+        unit->CastSpell(_x, _y, _z, spell, triggered);
 #endif
 #ifdef MANGOS
         unit->CastSpell(_x, _y, _z, spell, triggered);
@@ -2546,6 +2561,9 @@ namespace LuaUnit
 #endif
 #ifdef AZEROTHCORE
         SpellInfo const* spellEntry = sSpellMgr->GetSpellInfo(spell);
+#endif
+#if defined LHMANGOS
+        SpellInfo const* spellEntry = sSpellMgr.GetSpellEntry(spell);
 #endif
         if (!spellEntry)
             return 1;
@@ -2691,6 +2709,9 @@ namespace LuaUnit
 #if defined TRINITY || AZEROTHCORE
             Unit::DealDamage(unit, target, damage, NULL, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, durabilityloss);
             unit->SendAttackStateUpdate(HITINFO_AFFECTS_VICTIM, target, 1, SPELL_SCHOOL_MASK_NORMAL, damage, 0, 0, VICTIMSTATE_HIT, 0);
+#elif defined LHMANGOS
+            unit->DealDamage(target, damage, NULL, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, durabilityloss);
+            unit->SendAttackStateUpdate(HITINFO_NORMALSWING2, target, 1, SPELL_SCHOOL_MASK_NORMAL, damage, 0, 0, VICTIMSTATE_NORMAL, 0);
 #else
             unit->DealDamage(target, damage, NULL, DIRECT_DAMAGE, SPELL_SCHOOL_MASK_NORMAL, NULL, durabilityloss);
             unit->SendAttackStateUpdate(HITINFO_NORMALSWING2, target, SPELL_SCHOOL_MASK_NORMAL, damage, 0, 0, VICTIMSTATE_NORMAL, 0);
@@ -2796,7 +2817,11 @@ namespace LuaUnit
 
             unit->DealDamageMods(target, damage, &absorb);
             unit->DealDamage(target, damage, NULL, DIRECT_DAMAGE, schoolmask, NULL, false);
+#if defined LHMANGOS
+            unit->SendAttackStateUpdate(HITINFO_NORMALSWING2, target,1, schoolmask, damage, absorb, resist, VICTIMSTATE_NORMAL, 0); 
+#else
             unit->SendAttackStateUpdate(HITINFO_NORMALSWING2, target, schoolmask, damage, absorb, resist, VICTIMSTATE_NORMAL, 0);
+#endif
             return 0;
         }
 
@@ -2835,9 +2860,12 @@ namespace LuaUnit
 #else
 #ifdef CMANGOS
         SpellEntry const* spellEntry = GetSpellStore()->LookupEntry<SpellEntry>(spell);
+#elif defined LHMANGOS
+        SpellEntry const* spellEntry = sSpellMgr.GetSpellEntry(spell);
 #else
         SpellEntry const* spellEntry = sSpellStore.LookupEntry(spell);
 #endif
+
         if (spellEntry)
             unit->DealHeal(target, amount, spellEntry, critical);
 #endif
@@ -2904,6 +2932,9 @@ namespace LuaUnit
 #ifdef CMANGOS
         SpellEntry const* spellEntry = GetSpellStore()->LookupEntry<SpellEntry>(spell);
         unit->AddThreat(victim, threat, false, spellEntry ? spellEntry->SchoolMask : SPELL_SCHOOL_MASK_NONE, spellEntry);
+#elif defined LHMANGOS
+        SpellEntry const* spellEntry = sSpellMgr.GetSpellEntry(spell);
+        unit->AddThreat(victim, threat, false, spellEntry ? GetSchoolMask(spellEntry->School) : SPELL_SCHOOL_MASK_NONE, spellEntry);
 #else
         SpellEntry const* spellEntry = sSpellStore.LookupEntry(spell);
 #ifdef CLASSIC

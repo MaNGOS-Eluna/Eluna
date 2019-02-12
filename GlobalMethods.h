@@ -1556,8 +1556,11 @@ namespace LuaGlobalFunctions
                         return 1;
                     }
                 }
-
+#if defined LHMANGOS
+                pCreature->SetSummonPoint(pos);
+#else
                 pCreature->SetRespawnCoord(pos);
+#endif
 
                 // Active state set before added to map
                 pCreature->SetActiveObjectState(false);
@@ -1838,7 +1841,9 @@ namespace LuaGlobalFunctions
         int maxcount = Eluna::CHECKVAL<int>(L, 3);
         uint32 incrtime = Eluna::CHECKVAL<uint32>(L, 4);
         uint32 extendedcost = Eluna::CHECKVAL<uint32>(L, 5);
-
+#if defined LHMANGOS
+        uint32 itemflags = Eluna::CHECKVAL<uint32>(L, 5);
+#endif
 #if defined TRINITY || AZEROTHCORE
 #ifdef CATA
         if (!eObjectMgr->IsVendorItemValid(entry, item, maxcount, incrtime, extendedcost, 1))
@@ -1850,10 +1855,18 @@ namespace LuaGlobalFunctions
         eObjectMgr->AddVendorItem(entry, item, maxcount, incrtime, extendedcost);
 #endif
 #else
+#if defined LHMANGOS
+        if (!eObjectMgr->IsVendorItemValid(false, "npc_vendor", entry, item, maxcount, incrtime))
+            return 0;
+#else
         if (!eObjectMgr->IsVendorItemValid(false, "npc_vendor", entry, item, maxcount, incrtime, extendedcost, 0))
             return 0;
+#endif
+        
 #ifndef CLASSIC
         eObjectMgr->AddVendorItem(entry, item, maxcount, incrtime, extendedcost);
+#elif defined LHMANGOS
+        eObjectMgr->AddVendorItem(entry, item, maxcount, incrtime, itemflags);
 #else
         eObjectMgr->AddVendorItem(entry, item, maxcount, incrtime);
 #endif

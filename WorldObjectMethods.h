@@ -777,6 +777,8 @@ namespace LuaWorldObject
             case 4:
 #if defined TRINITY || AZEROTHCORE
                 type = TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT;
+#elif defined LHMANGOS
+                type = TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT;
 #else
                 type = TEMPSUMMON_TIMED_OOC_DESPAWN;
 #endif
@@ -793,7 +795,14 @@ namespace LuaWorldObject
             case 8:
                 type = TEMPSUMMON_MANUAL_DESPAWN;
                 break;
-#if !defined TRINITY && !AZEROTHCORE
+#if defined LHMANGOS
+            case 9:
+                type = TEMPSUMMON_TIMED_COMBAT_OR_DEAD_DESPAWN;
+                break;
+            case 10:
+                type = TEMPSUMMON_TIMED_COMBAT_OR_CORPSE_DESPAWN;
+                break;
+#elif !defined TRINITY && !AZEROTHCORE
             case 9:
                 type = TEMPSUMMON_TIMED_OOC_OR_CORPSE_DESPAWN;
                 break;
@@ -1163,8 +1172,13 @@ namespace LuaWorldObject
     {
         uint32 soundId = Eluna::CHECKVAL<uint32>(L, 2);
         Player* player = Eluna::CHECKOBJ<Player>(L, 3, false);
+#ifdef LHMANGOS
+        if (!sObjectMgr.GetSoundEntry(soundId))
+            return 0;
+#else
         if (!sSoundEntriesStore.LookupEntry(soundId))
             return 0;
+#endif 
 
         if (player)
             obj->PlayDirectSound(soundId, player);
@@ -1189,8 +1203,14 @@ namespace LuaWorldObject
     {
         uint32 soundId = Eluna::CHECKVAL<uint32>(L, 2);
         Player* player = Eluna::CHECKOBJ<Player>(L, 3, false);
+#ifdef LHMANGOS
+        if (!sObjectMgr.GetSoundEntry(soundId))
+            return 0;
+#else
         if (!sSoundEntriesStore.LookupEntry(soundId))
             return 0;
+#endif
+        
 
         if (player)
             obj->PlayDistanceSound(soundId, player);

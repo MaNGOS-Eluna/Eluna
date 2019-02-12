@@ -258,7 +258,11 @@ namespace LuaPlayer
      */
     int CanUninviteFromGroup(lua_State* L, Player* player)
     {
+#ifdef LHMANGOS
+        Eluna::Push(L, player->CanUninviteFromGroup(player->GetObjectGuid()) == ERR_PARTY_RESULT_OK);
+#else
         Eluna::Push(L, player->CanUninviteFromGroup() == ERR_PARTY_RESULT_OK);
+#endif     
         return 1;
     }
 
@@ -286,7 +290,12 @@ namespace LuaPlayer
     {
         bool honorable = Eluna::CHECKVAL<bool>(L, 2, true);
 
+#ifdef LHMANGOS
+        Eluna::Push(L, player->m_honorMgr.GetStoredHK());
+#else
         Eluna::Push(L, player->GetHonorStoredKills(honorable));
+#endif
+        
         return 1;
     }
 
@@ -331,7 +340,12 @@ namespace LuaPlayer
      */
     int IsMoving(lua_State* L, Player* player) // enable for unit when mangos support it
     {
+#ifdef LHMANGOS
+        Eluna::Push(L, player->IsMoving());
+#else
         Eluna::Push(L, player->isMoving());
+#endif
+       
         return 1;
     }
 
@@ -617,7 +631,12 @@ namespace LuaPlayer
      */
     int IsAcceptingWhispers(lua_State* L, Player* player)
     {
+#ifdef LHMANGOS
+        Eluna::Push(L, player->IsAcceptWhispers());
+#else
         Eluna::Push(L, player->isAcceptWhispers());
+#endif
+        
         return 1;
     }
 
@@ -1106,7 +1125,13 @@ namespace LuaPlayer
      */
     int GetManaBonusFromIntellect(lua_State* L, Player* player)
     {
+#ifdef LHMANGOS
+        //Eluna::Push(L, player->GetManaBonusFromIntellect(GetStat(STAT_INTELLECT)));
         Eluna::Push(L, player->GetManaBonusFromIntellect());
+#else
+        Eluna::Push(L, player->GetManaBonusFromIntellect());
+#endif
+        
         return 1;
     }
 
@@ -1117,7 +1142,13 @@ namespace LuaPlayer
      */
     int GetHealthBonusFromStamina(lua_State* L, Player* player)
     {
+#ifdef LHMANGOS
+        //Eluna::Push(L, player->GetManaBonusFromIntellect(GetStat(STAT_STAMINA)));
         Eluna::Push(L, player->GetHealthBonusFromStamina());
+#else
+        Eluna::Push(L, player->GetHealthBonusFromStamina());
+#endif
+        
         return 1;
     }
 
@@ -1321,11 +1352,20 @@ namespace LuaPlayer
      *
      * @return uint8 tag
      */
+#ifdef LHMANGOS
+    int GetChatTag(lua_State* L, Player* player) //wip int GetChatTag(lua_State* L, MasterPlayer* player)
+    {
+        Eluna::Push(L, player->chatTag());
+        return 1;
+    }
+#else
     int GetChatTag(lua_State* L, Player* player)
     {
         Eluna::Push(L, player->GetChatTag());
         return 1;
     }
+#endif 
+
 
     /**
      * Returns an item in given bag on given slot.
@@ -1771,8 +1811,12 @@ namespace LuaPlayer
     {
         uint32 faction = Eluna::CHECKVAL<uint32>(L, 2);
         int32 value = Eluna::CHECKVAL<int32>(L, 3);
-
+#ifdef LHMANGOS
+        FactionEntry const* factionEntry = sObjectMgr.GetFactionEntry(faction);
+#else
         FactionEntry const* factionEntry = sFactionStore.LookupEntry(faction);
+#endif 
+        
         player->GetReputationMgr().SetReputation(factionEntry, value);
         return 0;
     }
@@ -1912,7 +1956,12 @@ namespace LuaPlayer
 
         player->SetByteValue(UNIT_FIELD_BYTES_0, 2, gender);
         player->SetByteValue(PLAYER_BYTES_3, 0, gender);
+#ifdef LHMANGOS
+        player->InitPlayerDisplayIds();
+#else
         player->InitDisplayIds();
+#endif
+        
         return 0;
     }
 
@@ -1953,8 +2002,12 @@ namespace LuaPlayer
     {
         uint32 kills = Eluna::CHECKVAL<uint32>(L, 2);
         bool honorable = Eluna::CHECKVAL<bool>(L, 3, true);
-
+#ifdef LHMANGOS
+        player->m_honorMgr.SetStoredHK(kills);
+#else
         player->SetHonorStoredKills(kills, honorable);
+#endif
+        
         return 0;
     }
 
@@ -1966,8 +2019,13 @@ namespace LuaPlayer
     int SetRankPoints(lua_State* L, Player* player)
     {
         float rankPoints = Eluna::CHECKVAL<float>(L, 2);
-
+#ifdef LHMANGOS
+        player->m_honorMgr.SetRankPoints(rankPoints);
+#else
         player->SetRankPoints(rankPoints);
+#endif
+
+        
         return 0;
     }
 
@@ -1979,8 +2037,12 @@ namespace LuaPlayer
     int SetHonorLastWeekStandingPos(lua_State* L, Player* player)
     {
         int32 standingPos = Eluna::CHECKVAL<int32>(L, 2);
-
+#ifdef LHMANGOS
+        player->m_honorMgr.SetLastWeekCP(standingPos);
+#else
         player->SetHonorLastWeekStandingPos(standingPos);
+#endif
+        
         return 0;
     }
 #endif
@@ -2888,8 +2950,14 @@ namespace LuaPlayer
             uint32 repValue = quest->GetRepObjectiveValue();
             uint32 curRep = player->GetReputationMgr().GetReputation(repFaction);
             if (curRep < repValue)
+#ifdef LHMANGOS
+                if (FactionEntry const* factionEntry = sObjectMgr.GetFactionEntry(repFaction))
+                    player->GetReputationMgr().SetReputation(factionEntry, repValue);
+#else
                 if (FactionEntry const* factionEntry = sFactionStore.LookupEntry(repFaction))
                     player->GetReputationMgr().SetReputation(factionEntry, repValue);
+#endif 
+                
         }
 
 #if defined TRINITY || AZEROTHCORE
@@ -3009,7 +3077,13 @@ namespace LuaPlayer
                 player->SetQuestSlot(slot, 0);
 
                 // we ignore unequippable quest items in this case, its' still be equipped
+#ifdef LHMANGOS
+                
+                player->TakeOrReplaceQuestStartItems(logQuest, false,false);
+#else
                 player->TakeQuestSourceItem(logQuest, false);
+#endif 
+                
 
 #if defined TRINITY || AZEROTHCORE
                 if (quest->HasFlag(QUEST_FLAGS_FLAGS_PVP))
@@ -3042,17 +3116,30 @@ namespace LuaPlayer
      * @param [Player] receiver : is the [Player] that will receive the whisper, if TrinityCore
      * @param uint64 guid : is the GUID of a [Player] that will receive the whisper, not TrinityCore
      */
+#ifdef LHMANGOS
+     //WIP int Whisper(lua_State* L, MasterPlayer* player)
+    int Whisper(lua_State* L, Player* player) 
+    {
+#else
+
     int Whisper(lua_State* L, Player* player)
     {
+#endif
         std::string text = Eluna::CHECKVAL<std::string>(L, 2);
         uint32 lang = Eluna::CHECKVAL<uint32>(L, 3);
 #ifdef TRINITY
         Player* receiver = Eluna::CHECKOBJ<Player>(L, 4);
+#elif defined LHMANGOS
+        //WIP MasterPlayer* receiver = Eluna::CHECKOBJ<MasterPlayer>(L, 4);      
+        Player* receiver = Eluna::CHECKOBJ<Player>(L, 4);  
 #else
         uint64 guid = Eluna::CHECKVAL<uint64>(L, 4);
 #endif
 #ifdef TRINITY
         player->Whisper(text, (Language)lang, receiver);
+#elif defined LHMANGOS
+        //wip
+        // player->Whisper(text, (Language)lang, receiver); 
 #else
         player->Whisper(text, lang, ObjectGuid(guid));
 #endif
@@ -3903,7 +3990,12 @@ namespace LuaPlayer
     int RemovedInsignia(lua_State* L, Player* player)
     {
         Player* looter = Eluna::CHECKOBJ<Player>(L, 2);
+#ifdef LHMANGOS
+        player->RemovedInsignia(looter,nullptr);
+#else
         player->RemovedInsignia(looter);
+#endif
+        
         return 0;
     }
 
@@ -3959,7 +4051,7 @@ namespace LuaPlayer
             data << uint32(0);                                      // unk
             data << uint8(0);                                       // count
             data << uint32(0);                                      // unk
-#ifdef CMANGOS
+#if defined CMANGOS || defined LHMANGOS
             invited->GetSession()->SendPacket(data);
 #else
             invited->GetSession()->SendPacket(&data);
