@@ -8,6 +8,9 @@
 #define GLOBALMETHODS_H
 
 #include "BindingMap.h"
+#ifdef CMANGOS
+#include "GameEvents/GameEventMgr.h"
+#endif
 
 /***
  * These functions can be used anywhere at any time, including at start-up.
