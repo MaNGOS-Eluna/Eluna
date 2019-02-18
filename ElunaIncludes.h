@@ -7,7 +7,7 @@
 #ifndef _ELUNA_INCLUDES_H
 #define _ELUNA_INCLUDES_H
 
-#if defined CMANGOS & defined TBC
+#if defined CMANGOS
 #include "Accounts/AccountMgr.h"
 #include "AuctionHouse/AuctionHouseMgr.h"
 #include "Grids/Cell.h"
@@ -36,6 +36,9 @@
 #include "Spells/SpellMgr.h"
 #include "Entities/TemporarySpawn.h"
 #include "Server/WorldSession.h"
+#include "Server/DBCStores.h"
+#include "Groups/Group.h"
+#include "Entities/Player.h"
 #else
 #include "AccountMgr.h"
 #include "AuctionHouseMgr.h"
@@ -43,12 +46,12 @@
 #include "CellImpl.h"
 #include "Chat.h"
 #include "Channel.h"
-#include "Server/DBCStores.h"
+#include "DBCStores.h"
 #include "GameEventMgr.h"
 #include "GossipDef.h"
 #include "GridNotifiers.h"
 #include "GridNotifiersImpl.h"
-#include "Groups/Group.h"
+#include "Group.h"
 #include "Guild.h"
 #include "GuildMgr.h"
 #include "Language.h"
@@ -57,7 +60,7 @@
 #include "ObjectAccessor.h"
 #include "ObjectMgr.h"
 #include "Opcodes.h"
-#include "Entities/Player.h"
+#include "Player.h"
 #include "Pet.h"
 #include "ReputationMgr.h"
 #include "ScriptMgr.h"

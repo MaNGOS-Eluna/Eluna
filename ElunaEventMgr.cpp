@@ -6,7 +6,12 @@
 
 #include "ElunaEventMgr.h"
 #include "LuaEngine.h"
+#ifdef CMANGOS
 #include "Entities/Object.h"
+#else
+#include "Object.h"
+#endif
+
 
 extern "C"
 {

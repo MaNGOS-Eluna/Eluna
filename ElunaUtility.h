@@ -12,18 +12,33 @@
 #include <mutex>
 #include <memory>
 #include "Common.h"
+
+#ifdef CMANGOS
+
 #include "Globals/SharedDefines.h"
 #include "Entities/ObjectGuid.h"
+#include "Entities/Object.h"
+#include "Database/QueryResult.h"
+#include "Log.h"
+
+#else
+
+#include "SharedDefines.h"
+#include "ObjectGuid.h"
 #ifdef TRINITY
 #include "QueryResult.h"
 #include "Log.h"
 #ifdef CATA
-#include "Entities/Object.h"
+#include "Object.h"
 #endif
 #else
-#include "Database/QueryResult.h"
+#include "QueryResult.h"
 #include "Log.h"
 #endif
+
+#endif
+
+
 
 #ifdef TRINITY
 typedef QueryResult ElunaQuery;

@@ -8,16 +8,32 @@
 #define _LUA_ENGINE_H
 
 #include "Common.h"
+#ifdef CMANGOS
 #include "Globals/SharedDefines.h"
 #include "Server/DBCEnums.h"
 
 #include "Groups/Group.h"
 #include "Entities/Item.h"
-#ifndef TRINITY
+
 #include "Entities/Player.h"
-#endif
+
 #include "Weather/Weather.h"
 #include "World/World.h"
+#else
+
+#include "SharedDefines.h"
+#include "DBCEnums.h"
+
+#include "Group.h"
+#include "Item.h"
+#ifndef TRINITY
+#include "Player.h"
+#endif
+#include "Weather.h"
+#include "World.h"
+
+#endif
+
 #include "Hooks.h"
 #include "ElunaUtility.h"
 #include <mutex>

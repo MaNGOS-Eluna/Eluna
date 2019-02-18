@@ -5,11 +5,21 @@
 */
 
 #include "ElunaUtility.h"
+
+#ifdef CMANGOS
 #include "World/World.h"
 #include "Entities/Object.h"
 #include "Entities/Unit.h"
 #include "Entities/GameObject.h"
 #include "Server/DBCStores.h"
+#else 
+#include "World.h"
+#include "Object.h"
+#include "Unit.h"
+#include "GameObject.h"
+#include "DBCStores.h"
+#endif 
+
 
 uint32 ElunaUtil::GetCurrTime()
 {
