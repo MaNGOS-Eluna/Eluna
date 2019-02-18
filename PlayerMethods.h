@@ -220,6 +220,8 @@ namespace LuaPlayer
 
 #ifdef TRINITY
         Eluna::Push(L, player->GetSpellHistory()->HasCooldown(spellId));
+#elif defined CMANGOS
+        //Eluna::Push(L, player->HasSpellCooldown(spellId));
 #else
         Eluna::Push(L, player->HasSpellCooldown(spellId));
 #endif
@@ -530,7 +532,12 @@ namespace LuaPlayer
     int IsGroupVisibleFor(lua_State* L, Player* player)
     {
         Player* target = Eluna::CHECKOBJ<Player>(L, 2);
+#ifdef CMANGOS
+        //Eluna::Push(L, player->IsGroupVisibleFor(target));
+#else
         Eluna::Push(L, player->IsGroupVisibleFor(target));
+#endif 
+        
         return 1;
     }
 
@@ -543,7 +550,12 @@ namespace LuaPlayer
     int IsInSameRaidWith(lua_State* L, Player* player)
     {
         Player* target = Eluna::CHECKOBJ<Player>(L, 2);
+#ifdef CMANGOS
+        //Eluna::Push(L, player->IsInSameRaidWith(target));
+#else
         Eluna::Push(L, player->IsInSameRaidWith(target));
+#endif 
+        
         return 1;
     }
 
@@ -556,7 +568,12 @@ namespace LuaPlayer
     int IsInSameGroupWith(lua_State* L, Player* player)
     {
         Player* target = Eluna::CHECKOBJ<Player>(L, 2);
+#ifdef CMANGOS
+        //Eluna::Push(L, player->IsInSameGroupWith(target));
+#else
         Eluna::Push(L, player->IsInSameGroupWith(target));
+#endif 
+        
         return 1;
     }
 
@@ -849,6 +866,8 @@ namespace LuaPlayer
             Eluna::Push(L, player->GetSpellHistory()->GetRemainingCooldown(spellInfo));
         else
             Eluna::Push(L, 0);
+#elif defined CMANGOS
+        //Eluna::Push(L, uint32(player->GetSpellCooldownDelay(spellId)));
 #else
         Eluna::Push(L, uint32(player->GetSpellCooldownDelay(spellId)));
 #endif
@@ -910,8 +929,13 @@ namespace LuaPlayer
     int GetNextRandomRaidMember(lua_State* L, Player* player)
     {
         float radius = Eluna::CHECKVAL<float>(L, 2);
-
+#ifdef CMANGOS
+        //Eluna::Push(L, player->GetNextRandomRaidMember(radius));
+#else
         Eluna::Push(L, player->GetNextRandomRaidMember(radius));
+#endif
+
+        
         return 1;
     }
 
@@ -1667,7 +1691,18 @@ namespace LuaPlayer
     int SetPlayerLock(lua_State* L, Player* player)
     {
         bool apply = Eluna::CHECKVAL<bool>(L, 2, true);
-
+#ifdef CMANGOS
+        //if (apply)
+        //{
+        //    player->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PACIFIED | UNIT_FLAG_SILENCED);
+        //    player->SetClientControl(player, 0);
+        //}
+        //else
+        //{
+        //    player->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PACIFIED | UNIT_FLAG_SILENCED);
+        //    player->SetClientControl(player, 1);
+        //}
+#else
         if (apply)
         {
             player->SetFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PACIFIED | UNIT_FLAG_SILENCED);
@@ -1678,6 +1713,8 @@ namespace LuaPlayer
             player->RemoveFlag(UNIT_FIELD_FLAGS, UNIT_FLAG_PACIFIED | UNIT_FLAG_SILENCED);
             player->SetClientControl(player, 1);
         }
+#endif
+
         return 0;
     }
 
@@ -2089,8 +2126,12 @@ namespace LuaPlayer
     int SetFFA(lua_State* L, Player* player)
     {
         bool apply = Eluna::CHECKVAL<bool>(L, 2, true);
-
+#ifdef CMANGOS
+        //player->SetFFAPvP(apply);
+#else
         player->SetFFAPvP(apply);
+#endif
+        
         return 0;
     }
 #endif
@@ -3151,9 +3192,16 @@ namespace LuaPlayer
     int GiveXP(lua_State* L, Player* player)
     {
         uint32 xp = Eluna::CHECKVAL<uint32>(L, 2);
+#ifdef CMANGOS
+       //Creature* victim = Eluna::CHECKOBJ<Unit>(L, 3, false);
+
+       // player->GiveXP(xp, victim);
+#else
         Unit* victim = Eluna::CHECKOBJ<Unit>(L, 3, false);
 
         player->GiveXP(xp, victim);
+#endif
+        
         return 0;
     }
 
@@ -3402,6 +3450,12 @@ namespace LuaPlayer
             player->FinishTaxiFlight();
         else
             player->SaveRecallPosition();
+#elif defined CMANGOS
+        //if (player->IsTaxiFlying())
+        //{
+        //    player->GetMotionMaster()->MovementExpired();
+        //    player->m_taxi.ClearTaxiDestinations();
+        //}
 #else
         if (player->IsTaxiFlying())
         {
@@ -3511,6 +3565,9 @@ namespace LuaPlayer
         bool update = Eluna::CHECKVAL<bool>(L, 3, true);
 #ifdef TRINITY
         player->GetSpellHistory()->ResetCooldown(spellId, update);
+#elif defined CMANGOS
+        //SpellEntry const* spellInfo = sSpellTemplate.LookupEntry<SpellEntry>(spellId);
+        //player->RemoveSpellCooldown(*spellInfo, update);
 #else
         player->RemoveSpellCooldown(spellId, update);
 #endif
@@ -3551,6 +3608,8 @@ namespace LuaPlayer
     {
 #ifdef TRINITY
         player->GetSpellHistory()->ResetAllCooldowns();
+#elif defined CMANGOS
+        //player->RemoveAllSpellCooldown();
 #else
         player->RemoveAllSpellCooldown();
 #endif

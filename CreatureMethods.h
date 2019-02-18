@@ -327,7 +327,7 @@ namespace LuaCreature
 #ifdef TRINITY
         Eluna::Push(L, creature->GetSpellHistory()->HasCooldown(spellId));
 #elif defined CMANGOS
-        Eluna::Push(L, ((Player*)creature)->HasSpellCooldown(spellId)); //WIP
+        //Eluna::Push(L, ((Player*)creature)->HasSpellCooldown(spellId)); //WIP
 #else
         Eluna::Push(L, creature->HasSpellCooldown(spellId));
 #endif
