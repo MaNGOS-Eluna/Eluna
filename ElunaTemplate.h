@@ -15,7 +15,7 @@ extern "C"
 };
 #include "LuaEngine.h"
 #include "ElunaUtility.h"
-#ifdef 
+#ifdef CMANGOS
 #include "Globals/SharedDefines.h"
 #else
 #include "SharedDefines.h"
