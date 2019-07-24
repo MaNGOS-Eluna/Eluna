@@ -191,7 +191,7 @@ namespace LuaItem
      */
     int IsPotion(lua_State* L, Item* item)
     {
-        Eluna::Push(L, item->IsPotion());
+        //Eluna::Push(L, item->IsPotion());
         return 1;
     }
 

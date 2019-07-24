@@ -188,7 +188,7 @@ namespace LuaGlobalFunctions
 #if defined TRINITY || AZEROTHCORE
                     if ((team == TEAM_NEUTRAL || player->GetTeamId() == team) && (!onlyGM || player->IsGameMaster()))
 #else
-                    if ((team == TEAM_NEUTRAL || player->GetTeamId() == team) && (!onlyGM || player->isGameMaster()))
+                    if ((team == TEAM_NEUTRAL || player->GetTeamId() == team) && (!onlyGM || player->IsGameMaster()))
 #endif
                     {
                         Eluna::Push(L, player);
@@ -1556,7 +1556,7 @@ namespace LuaGlobalFunctions
                         return 1;
                     }
                 }
-#if defined LHMANGOS
+#if defined VMANGOS
                 pCreature->SetSummonPoint(pos);
 #else
                 pCreature->SetRespawnCoord(pos);
@@ -1841,7 +1841,7 @@ namespace LuaGlobalFunctions
         int maxcount = Eluna::CHECKVAL<int>(L, 3);
         uint32 incrtime = Eluna::CHECKVAL<uint32>(L, 4);
         uint32 extendedcost = Eluna::CHECKVAL<uint32>(L, 5);
-#if defined LHMANGOS
+#if defined VMANGOS
         uint32 itemflags = Eluna::CHECKVAL<uint32>(L, 5);
 #endif
 #if defined TRINITY || AZEROTHCORE
@@ -1855,7 +1855,7 @@ namespace LuaGlobalFunctions
         eObjectMgr->AddVendorItem(entry, item, maxcount, incrtime, extendedcost);
 #endif
 #else
-#if defined LHMANGOS
+#if defined VMANGOS
         if (!eObjectMgr->IsVendorItemValid(false, "npc_vendor", entry, item, maxcount, incrtime))
             return 0;
 #else
@@ -1865,7 +1865,7 @@ namespace LuaGlobalFunctions
         
 #ifndef CLASSIC
         eObjectMgr->AddVendorItem(entry, item, maxcount, incrtime, extendedcost);
-#elif defined LHMANGOS
+#elif defined VMANGOS
         eObjectMgr->AddVendorItem(entry, item, maxcount, incrtime, itemflags);
 #else
         eObjectMgr->AddVendorItem(entry, item, maxcount, incrtime);
@@ -2323,7 +2323,12 @@ namespace LuaGlobalFunctions
             nodeEntry->z = entry.z;
             nodeEntry->MountCreatureID[0] = mountH;
             nodeEntry->MountCreatureID[1] = mountA;
+#ifdef VMANGOS
+            //sObjectMgr.GetTaxiNodeEntry WIP
+            //sTaxiNodesStore.SetEntry(nodeId++, nodeEntry);
+#else
             sTaxiNodesStore.SetEntry(nodeId++, nodeEntry);
+#endif 
 #ifndef AZEROTHCORE
             sTaxiPathNodesByPath[pathId].set(index++, new TaxiPathNodeEntry(entry));
 #else

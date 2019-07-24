@@ -777,7 +777,7 @@ namespace LuaWorldObject
             case 4:
 #if defined TRINITY || AZEROTHCORE
                 type = TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT;
-#elif defined LHMANGOS
+#elif defined VMANGOS
                 type = TEMPSUMMON_TIMED_DESPAWN_OUT_OF_COMBAT;
 #else
                 type = TEMPSUMMON_TIMED_OOC_DESPAWN;
@@ -795,7 +795,7 @@ namespace LuaWorldObject
             case 8:
                 type = TEMPSUMMON_MANUAL_DESPAWN;
                 break;
-#if defined LHMANGOS
+#if defined VMANGOS
             case 9:
                 type = TEMPSUMMON_TIMED_COMBAT_OR_DEAD_DESPAWN;
                 break;
@@ -1172,7 +1172,7 @@ namespace LuaWorldObject
     {
         uint32 soundId = Eluna::CHECKVAL<uint32>(L, 2);
         Player* player = Eluna::CHECKOBJ<Player>(L, 3, false);
-#ifdef LHMANGOS
+#ifdef VMANGOS
         if (!sObjectMgr.GetSoundEntry(soundId))
             return 0;
 #else
@@ -1203,7 +1203,7 @@ namespace LuaWorldObject
     {
         uint32 soundId = Eluna::CHECKVAL<uint32>(L, 2);
         Player* player = Eluna::CHECKOBJ<Player>(L, 3, false);
-#ifdef LHMANGOS
+#ifdef VMANGOS
         if (!sObjectMgr.GetSoundEntry(soundId))
             return 0;
 #else

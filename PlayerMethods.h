@@ -258,7 +258,7 @@ namespace LuaPlayer
      */
     int CanUninviteFromGroup(lua_State* L, Player* player)
     {
-#ifdef LHMANGOS
+#ifdef VMANGOS
         Eluna::Push(L, player->CanUninviteFromGroup(player->GetObjectGuid()) == ERR_PARTY_RESULT_OK);
 #else
         Eluna::Push(L, player->CanUninviteFromGroup() == ERR_PARTY_RESULT_OK);
@@ -290,7 +290,7 @@ namespace LuaPlayer
     {
         bool honorable = Eluna::CHECKVAL<bool>(L, 2, true);
 
-#ifdef LHMANGOS
+#ifdef VMANGOS
         Eluna::Push(L, player->m_honorMgr.GetStoredHK());
 #else
         Eluna::Push(L, player->GetHonorStoredKills(honorable));
@@ -340,7 +340,7 @@ namespace LuaPlayer
      */
     int IsMoving(lua_State* L, Player* player) // enable for unit when mangos support it
     {
-#ifdef LHMANGOS
+#ifdef VMANGOS
         Eluna::Push(L, player->IsMoving());
 #else
         Eluna::Push(L, player->isMoving());
@@ -425,7 +425,7 @@ namespace LuaPlayer
 #if defined TRINITY || AZEROTHCORE
         Eluna::Push(L, player->IsGameMaster());
 #else
-        Eluna::Push(L, player->isGameMaster());
+        Eluna::Push(L, player->IsGameMaster());
 #endif
         return 1;
     }
@@ -455,7 +455,7 @@ namespace LuaPlayer
      */
     int IsImmuneToDamage(lua_State* L, Player* player)
     {
-        Eluna::Push(L, player->isTotalImmune());
+        Eluna::Push(L, player->IsTotalImmune());
         return 1;
     }
 
@@ -510,7 +510,7 @@ namespace LuaPlayer
      */
     int IsDND(lua_State* L, Player* player)
     {
-        Eluna::Push(L, player->isDND());
+        Eluna::Push(L, player->IsDND());
         return 1;
     }
 
@@ -521,7 +521,7 @@ namespace LuaPlayer
      */
     int IsAFK(lua_State* L, Player* player)
     {
-        Eluna::Push(L, player->isAFK());
+        Eluna::Push(L, player->IsAFK());
         return 1;
     }
 
@@ -579,7 +579,7 @@ namespace LuaPlayer
     {
         Unit* victim = Eluna::CHECKOBJ<Unit>(L, 2);
 
-        Eluna::Push(L, player->isHonorOrXPTarget(victim));
+        Eluna::Push(L, player->IsHonorOrXPTarget(victim));
         return 1;
     }
 
@@ -599,7 +599,7 @@ namespace LuaPlayer
 
     int IsGMVisible(lua_State* L, Player* player)
     {
-        Eluna::Push(L, player->isGMVisible());
+        Eluna::Push(L, player->IsGMVisible());
         return 1;
     }
 
@@ -613,14 +613,14 @@ namespace LuaPlayer
 #ifdef MANGOS
         Eluna::Push(L, player->IsTaxiCheater());
 #else
-        Eluna::Push(L, player->isTaxiCheater());
+        Eluna::Push(L, player->IsTaxiCheater());
 #endif
         return 1;
     }
 
     int IsGMChat(lua_State* L, Player* player)
     {
-        Eluna::Push(L, player->isGMChat());
+        Eluna::Push(L, player->IsGMChat());
         return 1;
     }
 
@@ -631,7 +631,7 @@ namespace LuaPlayer
      */
     int IsAcceptingWhispers(lua_State* L, Player* player)
     {
-#ifdef LHMANGOS
+#ifdef VMANGOS
         Eluna::Push(L, player->IsAcceptWhispers());
 #else
         Eluna::Push(L, player->isAcceptWhispers());
@@ -1030,7 +1030,7 @@ namespace LuaPlayer
     {
         uint32 skill = Eluna::CHECKVAL<uint32>(L, 2);
 
-        Eluna::Push(L, player->GetSkillTempBonusValue(skill));
+        Eluna::Push(L, player->GetSkillBonusTemporary(skill));
         return 1;
     }
 
@@ -1044,7 +1044,7 @@ namespace LuaPlayer
     {
         uint32 skill = Eluna::CHECKVAL<uint32>(L, 2);
 
-        Eluna::Push(L, player->GetSkillPermBonusValue(skill));
+        Eluna::Push(L, player->GetSkillBonusPermanent(skill));
         return 1;
     }
 
@@ -1058,7 +1058,7 @@ namespace LuaPlayer
     {
         uint32 skill = Eluna::CHECKVAL<uint32>(L, 2);
 
-        Eluna::Push(L, player->GetPureSkillValue(skill));
+        Eluna::Push(L, player->GetSkillValuePure(skill));
         return 1;
     }
 
@@ -1072,7 +1072,7 @@ namespace LuaPlayer
     {
         uint32 skill = Eluna::CHECKVAL<uint32>(L, 2);
 
-        Eluna::Push(L, player->GetBaseSkillValue(skill));
+        Eluna::Push(L, player->GetSkillValueBase(skill));
         return 1;
     }
 
@@ -1100,7 +1100,7 @@ namespace LuaPlayer
     {
         uint32 skill = Eluna::CHECKVAL<uint32>(L, 2);
 
-        Eluna::Push(L, player->GetPureMaxSkillValue(skill));
+        Eluna::Push(L, player->GetSkillMaxPure(skill));
         return 1;
     }
 
@@ -1114,7 +1114,7 @@ namespace LuaPlayer
     {
         uint32 skill = Eluna::CHECKVAL<uint32>(L, 2);
 
-        Eluna::Push(L, player->GetMaxSkillValue(skill));
+        Eluna::Push(L, player->GetSkillMax(skill));
         return 1;
     }
 
@@ -1125,7 +1125,7 @@ namespace LuaPlayer
      */
     int GetManaBonusFromIntellect(lua_State* L, Player* player)
     {
-#ifdef LHMANGOS
+#ifdef VMANGOS
         //Eluna::Push(L, player->GetManaBonusFromIntellect(GetStat(STAT_INTELLECT)));
         Eluna::Push(L, player->GetManaBonusFromIntellect());
 #else
@@ -1142,7 +1142,7 @@ namespace LuaPlayer
      */
     int GetHealthBonusFromStamina(lua_State* L, Player* player)
     {
-#ifdef LHMANGOS
+#ifdef VMANGOS
         //Eluna::Push(L, player->GetManaBonusFromIntellect(GetStat(STAT_STAMINA)));
         Eluna::Push(L, player->GetHealthBonusFromStamina());
 #else
@@ -1297,7 +1297,7 @@ namespace LuaPlayer
         uint32 questId = Eluna::CHECKVAL<uint32>(L, 2);
         int32 entry = Eluna::CHECKVAL<int32>(L, 3);
 
-        Eluna::Push(L, player->GetReqKillOrCastCurrentCount(questId, entry));
+        //Eluna::Push(L, player->GetReqKillOrCastCurrentCount(questId, entry)); // not used in MaNGOS, but used in scripting code
         return 1;
     }
 
@@ -1352,10 +1352,10 @@ namespace LuaPlayer
      *
      * @return uint8 tag
      */
-#ifdef LHMANGOS
+#ifdef VMANGOS
     int GetChatTag(lua_State* L, Player* player) //wip int GetChatTag(lua_State* L, MasterPlayer* player)
     {
-        Eluna::Push(L, player->chatTag());
+        Eluna::Push(L, player->GetChatTag());
         return 1;
     }
 #else
@@ -1742,7 +1742,7 @@ namespace LuaPlayer
     {
         uint8 race = Eluna::CHECKVAL<uint8>(L, 2);
 
-        player->setFactionForRace(race);
+        player->SetFactionForRace(race);
         return 0;
     }
 
@@ -1811,7 +1811,7 @@ namespace LuaPlayer
     {
         uint32 faction = Eluna::CHECKVAL<uint32>(L, 2);
         int32 value = Eluna::CHECKVAL<int32>(L, 3);
-#ifdef LHMANGOS
+#ifdef VMANGOS
         FactionEntry const* factionEntry = sObjectMgr.GetFactionEntry(faction);
 #else
         FactionEntry const* factionEntry = sFactionStore.LookupEntry(faction);
@@ -1956,7 +1956,7 @@ namespace LuaPlayer
 
         player->SetByteValue(UNIT_FIELD_BYTES_0, 2, gender);
         player->SetByteValue(PLAYER_BYTES_3, 0, gender);
-#ifdef LHMANGOS
+#ifdef VMANGOS
         player->InitPlayerDisplayIds();
 #else
         player->InitDisplayIds();
@@ -2002,7 +2002,7 @@ namespace LuaPlayer
     {
         uint32 kills = Eluna::CHECKVAL<uint32>(L, 2);
         bool honorable = Eluna::CHECKVAL<bool>(L, 3, true);
-#ifdef LHMANGOS
+#ifdef VMANGOS
         player->m_honorMgr.SetStoredHK(kills);
 #else
         player->SetHonorStoredKills(kills, honorable);
@@ -2019,7 +2019,7 @@ namespace LuaPlayer
     int SetRankPoints(lua_State* L, Player* player)
     {
         float rankPoints = Eluna::CHECKVAL<float>(L, 2);
-#ifdef LHMANGOS
+#ifdef VMANGOS
         player->m_honorMgr.SetRankPoints(rankPoints);
 #else
         player->SetRankPoints(rankPoints);
@@ -2037,7 +2037,7 @@ namespace LuaPlayer
     int SetHonorLastWeekStandingPos(lua_State* L, Player* player)
     {
         int32 standingPos = Eluna::CHECKVAL<int32>(L, 2);
-#ifdef LHMANGOS
+#ifdef VMANGOS
         player->m_honorMgr.SetLastWeekCP(standingPos);
 #else
         player->SetHonorLastWeekStandingPos(standingPos);
@@ -2701,7 +2701,7 @@ namespace LuaPlayer
 #ifdef TRINITY
         Eluna::Push(L, player->ResetTalentsCost());
 #else
-        Eluna::Push(L, player->resetTalentsCost());
+        Eluna::Push(L, player->GetResetTalentsCost());
 #endif
 #endif
         return 1;
@@ -2722,7 +2722,7 @@ namespace LuaPlayer
 #ifdef TRINITY
         player->ResetTalents(no_cost);
 #else
-        player->resetTalents(no_cost);
+        player->ResetTalents(no_cost);
 #endif
 #endif
 #if (!defined(TBC) && !defined(CLASSIC))
@@ -2747,7 +2747,7 @@ namespace LuaPlayer
 #ifdef TRINITY
         player->RemoveSpell(entry, disabled, learn_low_rank);
 #else
-        player->removeSpell(entry, disabled, learn_low_rank);
+        player->RemoveSpell(entry, disabled, learn_low_rank);
 #endif
         return 0;
     }
@@ -2950,7 +2950,7 @@ namespace LuaPlayer
             uint32 repValue = quest->GetRepObjectiveValue();
             uint32 curRep = player->GetReputationMgr().GetReputation(repFaction);
             if (curRep < repValue)
-#ifdef LHMANGOS
+#ifdef VMANGOS
                 if (FactionEntry const* factionEntry = sObjectMgr.GetFactionEntry(repFaction))
                     player->GetReputationMgr().SetReputation(factionEntry, repValue);
 #else
@@ -3077,7 +3077,7 @@ namespace LuaPlayer
                 player->SetQuestSlot(slot, 0);
 
                 // we ignore unequippable quest items in this case, its' still be equipped
-#ifdef LHMANGOS
+#ifdef VMANGOS
                 
                 player->TakeOrReplaceQuestStartItems(logQuest, false,false);
 #else
@@ -3116,7 +3116,7 @@ namespace LuaPlayer
      * @param [Player] receiver : is the [Player] that will receive the whisper, if TrinityCore
      * @param uint64 guid : is the GUID of a [Player] that will receive the whisper, not TrinityCore
      */
-#ifdef LHMANGOS
+#ifdef VMANGOS
      //WIP int Whisper(lua_State* L, MasterPlayer* player)
     int Whisper(lua_State* L, Player* player) 
     {
@@ -3129,7 +3129,7 @@ namespace LuaPlayer
         uint32 lang = Eluna::CHECKVAL<uint32>(L, 3);
 #ifdef TRINITY
         Player* receiver = Eluna::CHECKOBJ<Player>(L, 4);
-#elif defined LHMANGOS
+#elif defined VMANGOS
         //WIP MasterPlayer* receiver = Eluna::CHECKOBJ<MasterPlayer>(L, 4);      
         Player* receiver = Eluna::CHECKOBJ<Player>(L, 4);  
 #else
@@ -3137,7 +3137,7 @@ namespace LuaPlayer
 #endif
 #ifdef TRINITY
         player->Whisper(text, (Language)lang, receiver);
-#elif defined LHMANGOS
+#elif defined VMANGOS
         //wip
         // player->Whisper(text, (Language)lang, receiver); 
 #else
@@ -3746,7 +3746,7 @@ namespace LuaPlayer
 #elif AZEROTHCORE
         player->learnSpell(id);
 #else
-        player->learnSpell(id, false);
+        player->LearnSpell(id, false);
 #endif
         return 0;
     }
@@ -3990,7 +3990,7 @@ namespace LuaPlayer
     int RemovedInsignia(lua_State* L, Player* player)
     {
         Player* looter = Eluna::CHECKOBJ<Player>(L, 2);
-#ifdef LHMANGOS
+#ifdef VMANGOS
         player->RemovedInsignia(looter,nullptr);
 #else
         player->RemovedInsignia(looter);
@@ -4051,7 +4051,7 @@ namespace LuaPlayer
             data << uint32(0);                                      // unk
             data << uint8(0);                                       // count
             data << uint32(0);                                      // unk
-#if defined CMANGOS || defined LHMANGOS
+#if defined CMANGOS || defined VMANGOS
             invited->GetSession()->SendPacket(data);
 #else
             invited->GetSession()->SendPacket(&data);

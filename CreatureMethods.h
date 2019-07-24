@@ -271,7 +271,7 @@ namespace LuaCreature
             Eluna::Push(L, info->GetCategory() && creature->HasSpellCooldown(spell));
         else
             Eluna::Push(L, false);
-#elif defined LHMANGOS
+#elif defined VMANGOS
         if (const SpellInfo* info = sSpellMgr.GetSpellEntry(spell))
             Eluna::Push(L, info->Category && creature->HasSpellCooldown(spell));
         else
@@ -602,7 +602,7 @@ namespace LuaCreature
             Eluna::Push(L, creature->GetSpellCooldown(spell));
         else
             Eluna::Push(L, 0);
-#elif defined LHMANGOS
+#elif defined VMANGOS
         if (SpellInfo const* spellInfo = sSpellMgr.GetSpellEntry(spell))
             Eluna::Push(L, creature->GetSpellCooldownDelay(spell));
         else
@@ -665,7 +665,7 @@ namespace LuaCreature
         float z = Eluna::CHECKVAL<float>(L, 4);
         float o = Eluna::CHECKVAL<float>(L, 5);
 
-#if defined TRINITY || defined AZEROTHCORE || defined LHMANGOS
+#if defined TRINITY || defined AZEROTHCORE || defined VMANGOS
         creature->SetHomePosition(x, y, z, o);
 #else
         creature->SetRespawnCoord(x, y, z, o);
@@ -717,7 +717,7 @@ namespace LuaCreature
         float dist = Eluna::CHECKVAL<float>(L, 5, 0.0f);
         int32 aura = Eluna::CHECKVAL<int32>(L, 6, 0);
 
-#if defined CMANGOS || defined LHMANGOS
+#if defined CMANGOS || defined VMANGOS
         ThreatList const& threatlist = creature->getThreatManager().getThreatList();
 #endif
 #ifdef MANGOS
@@ -813,7 +813,7 @@ namespace LuaCreature
     {
 #ifdef TRINITY
         auto const& threatlist = creature->GetThreatManager().GetThreatenedByMeList();
-#elif defined AZEROTHCORE || defined LHMANGOS
+#elif defined AZEROTHCORE || defined VMANGOS
 auto const& threatlist = creature->getThreatManager().getThreatList();
 #else
         ThreatList const& threatlist = creature->GetThreatManager().getThreatList();
@@ -847,7 +847,7 @@ auto const& threatlist = creature->getThreatManager().getThreatList();
     {
 #ifdef TRINITY
         Eluna::Push(L, creature->GetThreatManager().GetThreatenedByMeList().size());
-#elif defined AZEROTHCORE || defined LHMANGOS
+#elif defined AZEROTHCORE || defined VMANGOS
         Eluna::Push(L, creature->getThreatManager().getThreatList().size());
 #else
         Eluna::Push(L, creature->GetThreatManager().getThreatList().size());
@@ -1388,10 +1388,10 @@ auto const& threatlist = creature->getThreatManager().getThreatList();
         CreatureTemplate const* cInfo = sObjectMgr->GetCreatureTemplate(entry);
         if (cInfo)
             Eluna::Push(L, cInfo->family);
-#elif defined LHMANGOS
+#elif defined VMANGOS
         CreatureInfo const* cInfo = sObjectMgr.GetCreatureTemplate(entry);
         if (cInfo)
-            Eluna::Push(L, cInfo->family);
+            Eluna::Push(L, cInfo->beast_family);
 #else
         CreatureInfo const* cInfo = ObjectMgr::GetCreatureTemplate(entry);
         if (cInfo)

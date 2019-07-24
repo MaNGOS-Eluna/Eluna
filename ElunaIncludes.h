@@ -59,7 +59,7 @@
 #include "Bag.h"
 #else
 #include "Config/Config.h"
-#if defined CMANGOS || defined LHMANGOS
+#if defined CMANGOS || defined VMANGOS
 #include "AI/AggressorAI.h"
 #else
 #include "AggressorAI.h"
@@ -95,7 +95,7 @@ typedef Opcodes                 OpcodesList;
 #define CORE_VERSION            REVISION_DATE " " REVISION_TIME
 #endif
 
-#if defined LHMANGOS
+#if defined VMANGOS
 #define CORE_NAME               "LHMaNGOS"
 #define CORE_VERSION            REVISION_DATE 
 #endif

@@ -55,7 +55,7 @@ ElunaUtil::WorldObjectInRangeCheck::WorldObjectInRangeCheck(bool nearest, WorldO
         if (GameObject const* go = i_obj->ToGameObject())
             i_obj_unit = go->GetOwner();
     if (!i_obj_unit)
-#ifdef LHMANGOS
+#ifdef VMANGOS
         i_obj_fact = sObjectMgr.GetFactionTemplateEntry(14);
 #else
         i_obj_fact = sFactionTemplateStore.LookupEntry(14);
@@ -81,7 +81,7 @@ bool ElunaUtil::WorldObjectInRangeCheck::operator()(WorldObject* u)
             target = go->GetOwner();
     if (target)
     {
-#if defined CMANGOS || defined LHMANGOS
+#if defined CMANGOS || defined VMANGOS
         if (i_dead && (i_dead == 1) != target->isAlive())
             return false;
 #else

@@ -147,7 +147,7 @@ namespace LuaGameObject
     {
 #if defined TRINITY || AZEROTHCORE
         Eluna::Push(L, go->GetLootRecipientGroup());
-#elif defined LHMANGOS    
+#elif defined VMANGOS    
         Eluna::Push(L, go->GetGroupLootRecipient());
 #else
         Eluna::Push(L, go->GetGroupLootRecipient());

@@ -106,7 +106,7 @@ void Eluna::OnPacketReceiveAny(Player* player, WorldPacket& packet, bool& result
 
         if (lua_isuserdata(L, r + 1))
             if (WorldPacket* data = CHECKOBJ<WorldPacket>(L, r + 1, false))
-#ifdef LHMANGOS
+#ifdef VMANGOS
                 // packet = *data; //wip
 #else
                 packet = *data;
@@ -134,7 +134,7 @@ void Eluna::OnPacketReceiveOne(Player* player, WorldPacket& packet, bool& result
 
         if (lua_isuserdata(L, r + 1))
             if (WorldPacket* data = CHECKOBJ<WorldPacket>(L, r + 1, false))
-#ifdef LHMANGOS
+#ifdef VMANGOS
                 // packet = *data; //wip
 #else
                 packet = *data;

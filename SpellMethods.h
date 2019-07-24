@@ -79,7 +79,7 @@ namespace LuaSpell
 #if defined TRINITY || AZEROTHCORE
         Eluna::Push(L, spell->GetSpellInfo()->GetDuration());
 #else
-        Eluna::Push(L, GetSpellDuration(spell->m_spellInfo));
+        Eluna::Push(L, spell->m_spellInfo->GetDuration());
 #endif
         return 1;
     }

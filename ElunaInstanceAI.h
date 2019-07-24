@@ -79,7 +79,7 @@ public:
         return Save();
     }
     const char* Save() const;
-#elif defined LHMANGOS
+#elif defined VMANGOS
     // Simply calls Save, since the functions are a bit different in name and data types on different cores
     std::string GetSaveData() 
     {
@@ -105,7 +105,7 @@ public:
     /*
      * These methods allow non-Lua scripts (e.g. DB, C++) to get/set instance data.
      */
-#if defined LHMANGOS
+#if defined VMANGOS
     uint32 GetData(uint32 key) const ;
     uint64 GetData64(uint32 key) const ;
 #else

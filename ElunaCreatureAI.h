@@ -22,7 +22,7 @@ struct ElunaCreatureAI : ScriptedAI
     bool justSpawned;
     // used to delay movementinform hook (WP hook)
     std::vector< std::pair<uint32, uint32> > movepoints;
-#if defined MANGOS || defined CMANGOS || defined LHMANGOS
+#if defined MANGOS || defined CMANGOS || defined VMANGOS
 #define me  m_creature
 #endif
 
@@ -201,7 +201,7 @@ struct ElunaCreatureAI : ScriptedAI
             ScriptedAI::CorpseRemoved(respawnDelay);
     }
 
-#if !defined TRINITY && !AZEROTHCORE && !defined LHMANGOS
+#if !defined TRINITY && !AZEROTHCORE && !defined VMANGOS
     // Enables use of MoveInLineOfSight
     bool IsVisible(Unit* who) const override
     {
