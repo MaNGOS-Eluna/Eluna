@@ -9,6 +9,17 @@
 
 #include "BindingMap.h"
 
+#ifdef AZEROTHCORE
+#include "BanManager.h"
+enum BanMode
+{
+    BAN_ACCOUNT = 1,
+    BAN_CHARACTER = 2,
+    BAN_IP = 3
+};
+
+#endif
+
 /***
  * These functions can be used anywhere at any time, including at start-up.
  */
@@ -156,7 +167,7 @@ namespace LuaGlobalFunctions
         int tbl = lua_gettop(L);
         uint32 i = 0;
 
-#if defined(MANGOS) && defined(CLASSIC)
+#if defined(MANGOS)
         eObjectAccessor()DoForAllPlayers([&](Player* player){
             if(player->IsInWorld())
             {
@@ -173,8 +184,6 @@ namespace LuaGlobalFunctions
             boost::shared_lock<boost::shared_mutex> lock(*HashMapHolder<Player>::GetLock());
 #elif defined(AZEROTHCORE)
             TRINITY_READ_GUARD(HashMapHolder<Player>::LockType, *HashMapHolder<Player>::GetLock());
-#elif defined(MANGOS) && !defined(CLASSIC)
-            ACE_READ_GUARD_RETURN(HashMapHolder<Player>::LockType, g, HashMapHolder<Player>::GetLock(), 0)
 #else
             HashMapHolder<Player>::ReadGuard g(HashMapHolder<Player>::GetLock());
 #endif
@@ -1926,16 +1935,17 @@ namespace LuaGlobalFunctions
      *
      *     enum BanMode
      *     {
-     *         BAN_ACCOUNT,
-     *         BAN_CHARACTER,
-     *         BAN_IP
+     *         BAN_ACCOUNT = 0,
+     *         BAN_CHARACTER = 1,
+     *         BAN_IP = 2
      *     };
      *
      * @param [BanMode] banMode : method of ban, refer to BanMode above
-     * @param string nameOrIP : name of the [Player] or IP of the [Player]
+     * @param string nameOrIP : If BanMode is 0 then accountname, if 1 then charactername if 2 then ip
      * @param uint32 duration : duration (in seconds) of the ban
      * @param string reason = "" : ban reason, this is optional
      * @param string whoBanned = "" : the [Player]'s name that banned the account, character or IP, this is optional
+     * @return int result : status of the ban. 0 if success, 1 if syntax error, 2 if target not found, 3 if a longer ban already exists, nil if unknown result
      */
     int Ban(lua_State* L)
     {
@@ -1945,35 +1955,78 @@ namespace LuaGlobalFunctions
         const char* reason = Eluna::CHECKVAL<const char*>(L, 4, "");
         const char* whoBanned = Eluna::CHECKVAL<const char*>(L, 5, "");
 
+        const int BAN_ACCOUNT = 0;
+        const int BAN_CHARACTER = 1;
+        const int BAN_IP = 2;
+
+        BanMode mode = BanMode::BAN_ACCOUNT;
+
         switch (banMode)
         {
             case BAN_ACCOUNT:
 #ifdef TRINITY
                 if (!Utf8ToUpperOnlyLatin(nameOrIP))
-                    return 0;
+                    return luaL_argerror(L, 2, "invalid account name");
 #else
                 if (!AccountMgr::normalizeString(nameOrIP))
-                    return 0;
+                    return luaL_argerror(L, 2, "invalid account name");
 #endif
+                mode = BanMode::BAN_ACCOUNT;
                 break;
             case BAN_CHARACTER:
                 if (!normalizePlayerName(nameOrIP))
-                    return 0;
+                    return luaL_argerror(L, 2, "invalid character name");
+                mode = BanMode::BAN_CHARACTER;
                 break;
             case BAN_IP:
                 if (!IsIPAddress(nameOrIP.c_str()))
-                    return 0;
+                    return luaL_argerror(L, 2, "invalid ip");
+                mode = BanMode::BAN_IP;
                 break;
             default:
-                return 0;
+                return luaL_argerror(L, 1, "unknown banmode");
         }
 
+        BanReturn result;
 #ifndef AZEROTHCORE
-        eWorld->BanAccount((BanMode)banMode, nameOrIP, duration, reason, whoBanned);
+        result = eWorld->BanAccount(mode, nameOrIP, duration, reason, whoBanned);
 #else
-        eWorld->BanAccount((BanMode)banMode, nameOrIP, std::to_string(duration) + "s", reason, whoBanned);
+        switch (banMode)
+        {
+            case BAN_ACCOUNT:
+                result = sBan->BanAccount(nameOrIP, std::to_string(duration) + "s", reason, whoBanned);
+            break;
+            case BAN_CHARACTER:
+                result = sBan->BanCharacter(nameOrIP, std::to_string(duration) + "s", reason, whoBanned);
+            break;
+            case BAN_IP:
+                result = sBan->BanIP(nameOrIP, std::to_string(duration) + "s", reason, whoBanned);
+            break;
+        }
 #endif
-        return 0;
+
+        switch (result)
+        {
+        case BanReturn::BAN_SUCCESS:
+            Eluna::Push(L, 0);
+            break;
+        case BanReturn::BAN_SYNTAX_ERROR:
+            Eluna::Push(L, 1);
+            break;
+        case BanReturn::BAN_NOTFOUND:
+            Eluna::Push(L, 2);
+            break;
+#ifdef AZEROTHCORE
+        case BanReturn::BAN_LONGER_EXISTS:
+            Eluna::Push(L, 3);
+            break;
+#else
+        case BanReturn::BAN_EXISTS:
+            Eluna::Push(L, 3);
+            break;
+#endif
+        }
+        return 1;
     }
 
     /**
